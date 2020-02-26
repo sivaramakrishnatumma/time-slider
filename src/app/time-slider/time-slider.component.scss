@@ -1,7 +1,5 @@
-// @import '~@momentum-ui/core/scss/ng/settings/settings';
-
 .slider-main-container {
-  padding: 0px 10px;
+  padding: 0 1rem;
   display: inline-block;
   background: #F2F4F5;
   width: 100%;
@@ -10,25 +8,16 @@
     display: inline-block;
     background: #F2F4F5;
     width: 100%;
-    height: 80px;
+    height: 5rem;
     position: relative;
   }
 
   .slider-bar {
     display: inline-block;
-    background: linear-gradient(90deg,
-        #7FEB86 0%,
-        #7FEB86 8%,
-        #D93829 8%,
-        #D93829 24%,
-        #7FEB86 24%,
-        #7FEB86 64%,
-        #D93829 64%,
-        #D93829 68%,
-        #7FEB86 68%);
-    height: 5px;
+    background-color: #929596;
+    height: 0.3rem;
     width: 100%;
-    top: 23px;
+    top: 1.5rem;
     position: relative;
   }
 
@@ -36,28 +25,27 @@
     display: inline-block;
     width: 100%;
     position: relative;
-    top: 18px;
+    top: 0.5rem;
     font-family: sans-serif;
-    font-size: 11px;
+    font-size: 0.7rem;
     user-select: none;
   }
 
   .slider-labels {
     display: inline-block;
-    width: 30px;
+    width: 2rem;
     color: #383C40;
-    text-align: left;
-    /* padding-left: 3px; */
+    text-align: center;
     position: absolute;
   }
 
   .slider-labels::before {
-    content: "";
+    content: '';
     position: absolute;
-    height: 10px;
-    border: 1px solid;
-    top: -21px;
-    left: 14.5px;
+    height: 0.6rem;
+    border: 1px solid #929596;
+    top: -1.1rem;
+    left: 0.9rem;
     color: #929596;
   }
 
@@ -65,45 +53,45 @@
     position: absolute;
     height: 100%;
     z-index: 2;
-    width: 3px;
+    width: 0.2rem;
     background: #148579;
     top: 0;
     cursor: pointer;
-    margin-left: -1.5px;
+    margin-left: -0.1rem;
   }
 
   .max-slider {
     position: absolute;
     height: 100%;
     z-index: 2;
-    width: 3px;
+    width: 0.2rem;
     background: #148579;
     top: 0;
     cursor: pointer;
-    margin-left: -1.5px;
+    margin-left: -0.1rem;
   }
 
   .min-label {
     position: absolute;
-    height: 12px;
+    height: 0.75rem;
     text-align: center;
     color: #FFFFFF;
     background: #148579;
-    font-size: 8px;
-    line-height: 12px;
-    width: 26px;
+    font-size: 0.5rem;
+    line-height: 0.75rem;
+    width: 1.6rem;
     left: 0;
   }
 
   .max-label {
     position: absolute;
-    height: 12px;
+    height: 0.75rem;
     text-align: center;
     color: #FFFFFF;
     background: #148579;
-    font-size: 8px;
-    line-height: 12px;
-    width: 26px;
+    font-size: 0.5rem;
+    line-height: 0.75rem;
+    width: 1.6rem;
     right: 0;
   }
 }

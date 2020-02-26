@@ -2,7 +2,7 @@
 <div class="container">
   <app-time-slider
     (sliderChange)="valuesChanged($event)"
-    view="7d"
+    [selectedTimeView]="'Last 1 Day'"
   ></app-time-slider>
   <p>Selected Values:</p>
   <p>Min: {{ min | date: "dd/MM/yyyy HH:mm" }}</p>

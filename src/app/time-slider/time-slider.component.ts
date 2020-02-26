@@ -1,39 +1,45 @@
 import {
-  Component,
-  OnInit,
   AfterViewInit,
-  Inject,
-  ViewChild,
-  ElementRef,
-  Output,
-  EventEmitter,
   ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
   Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
   SimpleChanges,
   SimpleChange
 } from "@angular/core";
+import { timer } from "rxjs";
+
 @Component({
   selector: "app-time-slider",
   templateUrl: "./time-slider.component.html",
   styleUrls: ["./time-slider.component.scss"],
   providers: [{ provide: Window, useValue: window }]
 })
-export class TimeSliderComponent implements OnInit, AfterViewInit {
+export class TimeSliderComponent
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   public labels: { time: number; left: string }[] = [];
   public minHandler: { percentage: number; time: number } = {
     percentage: 0,
-    time: null
+    time: 0
   };
   public maxHandler: { percentage: number; time: number } = {
     percentage: 100,
-    time: null
+    time: 0
   };
   public containerWidthInPixels: number;
 
   public initialMinTime;
   public initialMaxTime;
+  public view;
+  public refresh;
 
-  @Input() view: string;
+  @Input() selectedTimeView: string;
   @Output() sliderChange = new EventEmitter();
 
   @ViewChild("minSlider", { static: false }) minHandleEl: ElementRef;
@@ -42,28 +48,37 @@ export class TimeSliderComponent implements OnInit, AfterViewInit {
 
   constructor(private window: Window, private cdref: ChangeDetectorRef) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.refresh = timer(1000, 60000).subscribe(() => {
+      if (
+        this.initialMinTime === this.minHandler.time &&
+        this.initialMaxTime === this.maxHandler.time
+      ) {
+        const currentTime = new Date().setSeconds(0, 0);
+        if (this.initialMaxTime !== currentTime) {
+          this.setTimes();
+          this.createLabels();
+        }
+      }
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
-    const view: SimpleChange = changes.view;
-    if (view && view.currentValue) {
-      this.view = view.currentValue;
-      const currentDate: Date = new Date();
-      currentDate.setSeconds(0, 0);
-      this.initialMaxTime = currentDate.getTime();
-
-      this.initialMinTime =
-        this.view === "1d"
-          ? currentDate.setDate(currentDate.getDate() - 1)
-          : currentDate.setDate(currentDate.getDate() - 7);
-      this.minHandler.time = this.initialMinTime;
-      this.maxHandler.time = this.initialMaxTime;
-
-      this.sliderChange.emit({
-        min: this.minHandler.time,
-        max: this.maxHandler.time
-      });
-
+    const selectedTimeView: SimpleChange = changes.selectedTimeView;
+    if (!selectedTimeView.firstChange) {
+      this.minHandler = {
+        percentage: 0,
+        time: 0
+      };
+      this.maxHandler = {
+        percentage: 100,
+        time: 0
+      };
+      this.placeHandles();
+    }
+    if (selectedTimeView && selectedTimeView.currentValue) {
+      this.view = selectedTimeView.currentValue === "Last 1 Day" ? "1d" : "7d";
+      this.setTimes();
       this.createLabels();
     }
   }
@@ -73,11 +88,33 @@ export class TimeSliderComponent implements OnInit, AfterViewInit {
     this.cdref.detectChanges();
   }
 
+  public ngOnDestroy() {
+    this.refresh.unsubscribe();
+  }
+
+  public setTimes() {
+    const currentDate: Date = new Date();
+    currentDate.setSeconds(0, 0);
+    this.initialMaxTime = currentDate.getTime();
+
+    this.initialMinTime =
+      this.view === "1d"
+        ? currentDate.setDate(currentDate.getDate() - 1)
+        : currentDate.setDate(currentDate.getDate() - 7);
+    this.minHandler.time = this.initialMinTime;
+    this.maxHandler.time = this.initialMaxTime;
+
+    this.sliderChange.emit({
+      min: this.minHandler.time,
+      max: this.maxHandler.time
+    });
+  }
+
   public createLabels() {
     const maxDate = new Date(this.maxHandler.time);
     if (this.view === "1d") {
-      maxDate.setMinutes(0);
       maxDate.setMinutes(0, 0);
+      this.labels = [];
       for (let i = 0; i < 24; i++) {
         const date = this.removeHours(maxDate, i).getTime();
         this.labels.unshift({
@@ -89,6 +126,7 @@ export class TimeSliderComponent implements OnInit, AfterViewInit {
       const hours = maxDate.getHours();
       maxDate.setHours(hours - (hours % 12));
       maxDate.setMinutes(0, 0);
+      this.labels = [];
       for (let i = 0; i < 14; i++) {
         const date = this.removeHours(maxDate, i * 12).getTime();
         this.labels.unshift({
@@ -219,6 +257,15 @@ export class TimeSliderComponent implements OnInit, AfterViewInit {
 
   getCloserTime(time) {
     const date = new Date(time);
+
+    if (Math.abs(this.initialMaxTime - date.getTime()) < 300000) {
+      return this.initialMaxTime;
+    }
+
+    if (Math.abs(this.initialMinTime - date.getTime()) < 300000) {
+      return this.initialMinTime;
+    }
+
     const currentmMinutes = date.getMinutes();
     const remainder = currentmMinutes % 5;
     const newMinutes =
