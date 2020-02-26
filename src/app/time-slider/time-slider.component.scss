@@ -1,0 +1,109 @@
+// @import '~@momentum-ui/core/scss/ng/settings/settings';
+
+.slider-main-container {
+  padding: 0px 10px;
+  display: inline-block;
+  background: #F2F4F5;
+  width: 100%;
+
+  .slider-container {
+    display: inline-block;
+    background: #F2F4F5;
+    width: 100%;
+    height: 80px;
+    position: relative;
+  }
+
+  .slider-bar {
+    display: inline-block;
+    background: linear-gradient(90deg,
+        #7FEB86 0%,
+        #7FEB86 8%,
+        #D93829 8%,
+        #D93829 24%,
+        #7FEB86 24%,
+        #7FEB86 64%,
+        #D93829 64%,
+        #D93829 68%,
+        #7FEB86 68%);
+    height: 5px;
+    width: 100%;
+    top: 23px;
+    position: relative;
+  }
+
+  .labels-container {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    top: 18px;
+    font-family: sans-serif;
+    font-size: 11px;
+    user-select: none;
+  }
+
+  .slider-labels {
+    display: inline-block;
+    width: 30px;
+    color: #383C40;
+    text-align: left;
+    /* padding-left: 3px; */
+    position: absolute;
+  }
+
+  .slider-labels::before {
+    content: "";
+    position: absolute;
+    height: 10px;
+    border: 1px solid;
+    top: -21px;
+    left: 14.5px;
+    color: #929596;
+  }
+
+  .min-slider {
+    position: absolute;
+    height: 100%;
+    z-index: 2;
+    width: 3px;
+    background: #148579;
+    top: 0;
+    cursor: pointer;
+    margin-left: -1.5px;
+  }
+
+  .max-slider {
+    position: absolute;
+    height: 100%;
+    z-index: 2;
+    width: 3px;
+    background: #148579;
+    top: 0;
+    cursor: pointer;
+    margin-left: -1.5px;
+  }
+
+  .min-label {
+    position: absolute;
+    height: 12px;
+    text-align: center;
+    color: #FFFFFF;
+    background: #148579;
+    font-size: 8px;
+    line-height: 12px;
+    width: 26px;
+    left: 0;
+  }
+
+  .max-label {
+    position: absolute;
+    height: 12px;
+    text-align: center;
+    color: #FFFFFF;
+    background: #148579;
+    font-size: 8px;
+    line-height: 12px;
+    width: 26px;
+    right: 0;
+  }
+}

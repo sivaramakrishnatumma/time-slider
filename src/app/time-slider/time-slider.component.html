@@ -1,0 +1,22 @@
+<div class="slider-main-container">
+  <div #sliderContainer class="slider-container">
+    <div class="slider-bar"></div>
+    <div #minSlider class="min-slider" (mousedown)="minHandleMouseDown($event)">
+      <div class="min-label">
+        {{ minHandler.time | date: "HH:mm" }}
+      </div>
+    </div>
+    <div #maxSlider class="max-slider" (mousedown)="maxHandleMouseDown($event)">
+      <div class="max-label">{{ maxHandler.time | date: "HH:mm" }}</div>
+    </div>
+    <div class="labels-container">
+      <span
+        *ngFor="let label of labels"
+        class="slider-labels"
+        [ngStyle]="{ left: 'calc(' + label.left + '% - 15px)' }"
+      >
+        {{ label.time | date: (view === "1d" ? "HH:mm" : "dd/MM HH:mm") }}
+      </span>
+    </div>
+  </div>
+</div>
